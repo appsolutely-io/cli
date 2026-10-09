@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify
+
+  # A clean runner has Node and Docker and nothing of PHP, which is the machine init promises to work on.
+  smoke-init:
+    runs-on: ubuntu-latest
+    env:
+      # Needed while the host package and appsolutely/aio are private: a token that reads both.
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      # Set while the host package is not on Packagist, to its VCS repository URL.
+      APPSOLUTELY_HOST_REPOSITORY: ${{ vars.APPSOLUTELY_HOST_REPOSITORY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: init a landing site
+        run: |
+          node dist/cli.js init "$RUNNER_TEMP/demo" --self-host --template landing --industry software \
+            ${APPSOLUTELY_HOST_REPOSITORY:+--repository "$APPSOLUTELY_HOST_REPOSITORY"}
+      - name: the project is a host on appsolutely/aio with the self-host bundle
+        working-directory: ${{ runner.temp }}/demo
+        run: |
+          test -f deploy/compose.yaml
+          test -f Dockerfile
+          node -e "const m = require('./composer.json'); if (!m.require['appsolutely/aio']) process.exit(1)"
+          node -e "const p = require('./appsolutely.json'); if (p.industry !== 'software' || p.siteType !== 'landing') process.exit(1)"
+          docker compose -f deploy/compose.yaml config --quiet

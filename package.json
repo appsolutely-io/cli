@@ -1,0 +1,37 @@
+{
+  "name": "@appsolutely/cli",
+  "version": "0.1.0",
+  "description": "Scaffold an Appsolutely site, bring it up, and generate a typed client for an install.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsolutely-io/cli.git"
+  },
+  "type": "module",
+  "bin": {
+    "appsolutely": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test \"test/*.test.ts\"",
+    "build": "node scripts/clean.ts && tsc -p tsconfig.build.json",
+    "prepack": "pnpm build",
+    "check:consumer": "node scripts/check-consumer.ts",
+    "verify": "pnpm format:check && pnpm typecheck && pnpm test && pnpm check:consumer",
+    "check:sdk-pipeline": "node scripts/check-sdk-pipeline.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.3"
+  }
+}
