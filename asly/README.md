@@ -8,6 +8,6 @@ cd demo
 npx asly deploy
 ```
 
-Installing `@appsolutely/cli` globally gives both `appsolutely` and `asly`, so there is no need to install this package as well.
+`npm install -g asly` gives the `asly` command; `npm install -g @appsolutely/cli` gives `appsolutely`. Each command belongs to one package, so both can be installed, in either order.
 
 See the [CLI's documentation](https://github.com/appsolutely-io/cli#readme) for every command.

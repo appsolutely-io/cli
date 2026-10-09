@@ -9,7 +9,7 @@ npx @appsolutely/cli deploy
 npx @appsolutely/cli generate-sdk --lang ts
 ```
 
-`asly` is the CLI's short name: `npx asly init demo …` is the same command, and a global install of `@appsolutely/cli` links both `appsolutely` and `asly`.
+`asly` is the CLI's short name: `npx asly init demo …` is the same command. It comes from the `asly` package, so a global install gives `asly` with `npm install -g asly`; `appsolutely` and `asly` each belong to one package, so both can be installed, in either order.
 
 The CLI orchestrates what the platform already ships: the host application and its self-host bundle, aio's own `aio:install`, and the `@appsolutely/sdk` generator pipeline. It holds no Laravel code and no generator configuration of its own.
 

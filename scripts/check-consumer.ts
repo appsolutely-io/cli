@@ -1,5 +1,5 @@
 // Packs this package and runs it the way npx does: installed from the tarball into a fresh
-// project, through the bins npm links, on compiled JavaScript alone. Then packs asly/ and runs
+// project, through the bin npm links, on compiled JavaScript alone. Then packs asly/ and runs
 // it beside that tarball, as `npx asly` runs it beside the CLI release it depends on.
 //   pnpm check:consumer
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -41,7 +41,6 @@ try {
   execFileSync('npm', ['install', '--no-audit', '--no-fund', join(work, tarball)], { cwd: consumer, stdio: 'ignore' });
 
   assertVersion(npx(consumer, '--version'), 'appsolutely');
-  assertVersion(spawnSync('npx', ['--no-install', 'asly', '--version'], { cwd: consumer, encoding: 'utf8' }), 'asly');
   const usage = npx(consumer, '--help');
   for (const command of ['init', 'deploy', 'generate-sdk']) {
     if (!usage.stdout.includes(`appsolutely ${command}`)) {
@@ -62,13 +61,12 @@ try {
     cwd: shimConsumer,
     stdio: 'ignore',
   });
-  // Both packages link `asly`, so the shim's own file is run to prove it reaches the CLI.
   assertVersion(
-    spawnSync('node', [join(shimConsumer, 'node_modules', 'asly', 'bin.js'), '--version'], { encoding: 'utf8' }),
-    'the asly package',
+    spawnSync('npx', ['--no-install', 'asly', '--version'], { cwd: shimConsumer, encoding: 'utf8' }),
+    'asly',
   );
   console.log(
-    `The installed ${tarball} runs as appsolutely and asly: ${version}, usage, and a refusal with its reason; ${shim} runs it.`,
+    `The installed ${tarball} runs: ${version}, usage, and a refusal with its reason; ${shim} runs it as asly.`,
   );
 } finally {
   rmSync(work, { recursive: true, force: true });

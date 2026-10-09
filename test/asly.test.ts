@@ -6,9 +6,9 @@ const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.ur
 const cli = JSON.parse(read('package.json'));
 const shim = JSON.parse(read('asly/package.json'));
 
-test('asly is a second name for the same command', () => {
-  assert.deepEqual(Object.keys(cli.bin).sort(), ['appsolutely', 'asly']);
-  assert.equal(cli.bin.asly, cli.bin.appsolutely);
+test('each command name belongs to one package, so either can be installed globally after the other', () => {
+  assert.deepEqual(Object.keys(cli.bin), ['appsolutely']);
+  assert.deepEqual(Object.keys(shim.bin), ['asly']);
 });
 
 test('the asly package is released with the CLI and runs exactly that version', () => {

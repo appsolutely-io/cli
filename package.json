@@ -9,8 +9,7 @@
   },
   "type": "module",
   "bin": {
-    "appsolutely": "dist/cli.js",
-    "asly": "dist/cli.js"
+    "appsolutely": "dist/cli.js"
   },
   "files": [
     "dist"
