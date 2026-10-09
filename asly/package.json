@@ -1,0 +1,24 @@
+{
+  "name": "asly",
+  "version": "0.1.0",
+  "description": "The short name of @appsolutely/cli: `npx asly` runs the Appsolutely CLI.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsolutely-io/cli.git",
+    "directory": "asly"
+  },
+  "type": "module",
+  "bin": {
+    "asly": "bin.js"
+  },
+  "files": [
+    "bin.js"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "dependencies": {
+    "@appsolutely/cli": "0.1.0"
+  }
+}
