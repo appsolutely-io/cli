@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { deploy, DEPLOY_USAGE } from './commands/deploy.ts';
 import { init, INIT_USAGE } from './commands/init.ts';
 import { type Context, PROGRAM, UsageError } from './context.ts';
 
@@ -9,6 +10,7 @@ interface Command {
 
 const commands: Record<string, Command> = {
   init: { usage: INIT_USAGE, run: init },
+  deploy: { usage: DEPLOY_USAGE, run: deploy },
 };
 
 function version(): string {
